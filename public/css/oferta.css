@@ -1,0 +1,26 @@
+#btnOfertas {
+    top: 0;
+    right: 0;
+    width: 12%;
+    height: 20vh;
+    text-align: center;
+    background-color: #7cb342;
+    color: white;
+    cursor: pointer;
+    transition: 0.7s;
+}
+#btnOfertas:hover {
+    background-color: green;
+    transition: 0.7s;
+}
+#btnOfertas div p {
+    font-size: 2.5rem;
+    margin: 0;
+}
+#divOfertas {
+    position: absolute;
+    width: 22%;
+    right: -25%;
+    top: 25vh;
+    height: 65vh;
+}
