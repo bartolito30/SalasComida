@@ -17,10 +17,9 @@ class Maps {
             let marker = new google.maps.Marker({
                 position: pos,
                 map: map,
-                // title: "Aquí estás!",
-                // icon: 'https://i.postimg.cc/65GCkjzh/marker-Rest-White.png' // https://i.postimg.cc/L6rY4Vwm/marker2-copia.png
+                title: "Aquí estás!",
+                icon: 'https://i.postimg.cc/7Lwv11Rd/marker-Default-60x75.png' // https://i.postimg.cc/L6rY4Vwm/marker2-copia.png
             });
-            
             /*
             google.maps.event.addListener(infoWindow, 'domready', function() {
                 let divInfo = $('#info').parent().parent().parent();
@@ -42,39 +41,37 @@ const myMap = new Maps();
 function initMap() {
     myMap.myLocation().then((pos) => {
         let myLatLng = { lat: pos.latitude, lng: pos.longitude };
-        
+        let map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 16,
+            center: myLatLng,
+            disableDefaultUI: true,
+            styles: [
+                {
+                    "featureType": "poi",
+                    "stylers": [
+                        { "visibility": "off" }
+                    ]
+                }
+            ]
+        });
+        myMap.map = map;
         $.ajax({
             url: "/locations",
-            aysnc: false,
             success: function (response) {
-                let json = JSON.parse(response);
-                let map = new google.maps.Map(document.getElementById("map"), {
-                    zoom: 18,
-                    center: myLatLng,
-                    disableDefaultUI: true,
-                    styles: [
-                        {
-                            "featureType": "poi",
-                            "stylers": [
-                                { "visibility": "off" }
-                            ]
-                        }
-                    ]
-                });
-                myMap.map = map;
-                for (let i = 0; i < json.length; i++) {
+                let jsonLocations = JSON.parse(response);
+                for (let i = 0; i < jsonLocations.length; i++) {
                     ll = {
-                        lat: json[i].latitud,
-                        lng: json[i].longitud
+                        lat: Number(jsonLocations[i].latitud),
+                        lng: Number(jsonLocations[i].longitud)
                     };
-                    console.log(ll);
                     myMap.addMarker(map, ll).then((marker) => {
+                        // marker.title = "";
                         marker.addListener("click", () => {
                             $('#divRest').css('left', 0);
                             $('#divRest').css('transition', '1s');
-                            // Change icon
+                            marker
                         });
-                        // myMap.markers["myLocation"] = marker;                
+                        myMap.markers.push(marker);                
                     });
                 }
             }
